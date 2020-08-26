@@ -18,7 +18,9 @@ export class UsersRepository extends Repository<User> {
     try {
       await user.save()
     } catch (error) {
-      if (error.code === 'ER_DUB_ENTRY') {
+      console.log(error.code)
+
+      if (error.code === 'ER_DUP_ENTRY') {
         throw new ConflictException('Username already exists')
       } else throw new InternalServerErrorException()
     }
