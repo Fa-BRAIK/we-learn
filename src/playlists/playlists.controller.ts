@@ -1,6 +1,14 @@
-import { Controller, UseGuards, Post, Get } from '@nestjs/common'
+import {
+  Controller,
+  UseGuards,
+  Post,
+  Get,
+  Body,
+  ValidationPipe,
+} from '@nestjs/common'
 import { PlaylistsService } from './playlists.service'
 import { AuthGuard } from '@nestjs/passport'
+import { CreatePlaylistDto } from './dto/create-playlist.dto'
 
 @Controller('playlists')
 @UseGuards(AuthGuard())
@@ -14,7 +22,11 @@ export class PlaylistsController {
   public async findFilter(): Promise<void> {}
 
   @Post('create')
-  public async create(): Promise<void> {
+  public async create(
+    @Body(ValidationPipe) createPlaylistDto: CreatePlaylistDto,
+  ): Promise<void> {
+    console.log(createPlaylistDto)
+
     this.service.create()
   }
 }
