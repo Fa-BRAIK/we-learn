@@ -1,6 +1,4 @@
-import { IsString, MinLength, MaxLength, Matches } from 'class-validator'
-
-const link_regex: RegExp = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/
+import { IsString, MinLength, MaxLength, IsUrl } from 'class-validator'
 
 export class CreatePlaylistDto {
   @IsString()
@@ -14,6 +12,6 @@ export class CreatePlaylistDto {
   description: string
 
   @IsString()
-  @Matches(link_regex, { message: 'Invalid Link' })
+  @IsUrl()
   link: string
 }
