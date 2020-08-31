@@ -13,6 +13,7 @@ import {
   Put,
   Param,
   ParseIntPipe,
+  Delete,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { PlaylistsService } from './playlists.service'
@@ -49,7 +50,7 @@ export class PlaylistsController {
     @Body(ValidationPipe) createPlaylistDto: CreatePlaylistDto,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<void> {
-    this.service.update(createPlaylistDto, id)
+    await this.service.update(createPlaylistDto, id)
   }
 
   @Put('update/:id/cover')
@@ -59,7 +60,15 @@ export class PlaylistsController {
     @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<void> {
-    this.service.updateCoverPicture(cover, user, id)
+    await this.service.updateCoverPicture(cover, user, id)
+  }
+
+  @Delete('delete/:id')
+  public async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<void> {
+    await this.service.delete(id, user)
   }
 }
 

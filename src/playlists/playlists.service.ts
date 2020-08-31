@@ -75,6 +75,17 @@ export class PlaylistsService {
     }
   }
 
+  public async delete(id: number, user: User): Promise<void> {
+    const result = await this.repository.delete(id)
+
+    if (result.affected === 0) {
+      throw new NotFoundException('Playlist with giving id not found')
+    } else {
+      fs.emptyDir(`uploads/users/${user.id}/playlists/${id}`)
+      fs.remove(`uploads/users/${user.id}/playlists/${id}`)
+    }
+  }
+
   private async saveImage(
     cover: Express.Multer.File,
     path: string,
