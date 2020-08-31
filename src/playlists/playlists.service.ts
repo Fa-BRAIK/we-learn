@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { PlaylistsRepository } from './playlists.repository'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CreatePlaylistDto } from './dto/create-playlist.dto'
 import { Playlist } from './playlist.entity'
 import { User } from 'src/users/user.entity'
 import * as fs from 'fs-extra'
+import { Repository } from 'typeorm'
 
 @Injectable()
 export class PlaylistsService {
@@ -13,7 +14,7 @@ export class PlaylistsService {
     private readonly repository: PlaylistsRepository,
   ) {}
 
-  async create(
+  public async create(
     createPlaylistDto: CreatePlaylistDto,
     cover: Express.Multer.File,
     user: User,
@@ -33,6 +34,25 @@ export class PlaylistsService {
 
     playlist.user = undefined
     return playlist
+  }
+
+  public async update(
+    createPlaylistDto: CreatePlaylistDto,
+    id: number,
+  ): Promise<Playlist> {
+    const { title, description, link } = createPlaylistDto
+    const playlist = await this.repository.findOne(id)
+
+    if (playlist) {
+      playlist.title = title
+      playlist.description = description
+      playlist.link = link
+      await playlist.save()
+
+      return playlist
+    } else {
+      throw new NotFoundException('Playlist with giving id not found')
+    }
   }
 
   private async saveImage(

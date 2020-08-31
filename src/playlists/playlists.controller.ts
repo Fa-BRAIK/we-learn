@@ -46,11 +46,10 @@ export class PlaylistsController {
 
   @Put('update/:id')
   public async update(
-    @Body(ValidationPipe) CreatePlaylistDto: CreatePlaylistDto,
-    @GetUser() user: User,
+    @Body(ValidationPipe) createPlaylistDto: CreatePlaylistDto,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Playlist> {
-    return null
+    return this.service.update(createPlaylistDto, id)
   }
 }
 
