@@ -48,9 +48,16 @@ export class PlaylistsController {
   public async update(
     @Body(ValidationPipe) createPlaylistDto: CreatePlaylistDto,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<Playlist> {
-    return this.service.update(createPlaylistDto, id)
+  ): Promise<void> {
+    this.service.update(createPlaylistDto, id)
   }
+
+  @Put('update/:id/cover')
+  @UseInterceptors(FileInterceptor('cover', { fileFilter: imageFileFilter }))
+  public async updateCoverPicture(
+    @UploadedFile() cover: Express.Multer.File,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<void> {}
 }
 
 //res.sendFile(cover.filename, { root: 'temp' })

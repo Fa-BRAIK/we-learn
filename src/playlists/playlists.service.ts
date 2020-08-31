@@ -39,7 +39,7 @@ export class PlaylistsService {
   public async update(
     createPlaylistDto: CreatePlaylistDto,
     id: number,
-  ): Promise<Playlist> {
+  ): Promise<void> {
     const { title, description, link } = createPlaylistDto
     const playlist = await this.repository.findOne(id)
 
@@ -48,8 +48,6 @@ export class PlaylistsService {
       playlist.description = description
       playlist.link = link
       await playlist.save()
-
-      return playlist
     } else {
       throw new NotFoundException('Playlist with giving id not found')
     }
