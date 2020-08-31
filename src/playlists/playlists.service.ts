@@ -53,6 +53,28 @@ export class PlaylistsService {
     }
   }
 
+  public async updateCoverPicture(
+    cover: Express.Multer.File,
+    user: User,
+    id: number,
+  ): Promise<void> {
+    try {
+      const playlist = await this.repository.findOneOrFail(id)
+
+      fs.remove(`uploads/${playlist.cover}`)
+
+      const fileExtension = cover.mimetype.substr(6),
+        path = `/users/${user.id}/playlists/${id}/cover.${fileExtension}`
+
+      playlist.cover = path
+      playlist.save()
+
+      this.saveImage(cover, path)
+    } catch (e) {
+      throw new NotFoundException('Playlist with giving id not found')
+    }
+  }
+
   private async saveImage(
     cover: Express.Multer.File,
     path: string,

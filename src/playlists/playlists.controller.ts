@@ -56,8 +56,11 @@ export class PlaylistsController {
   @UseInterceptors(FileInterceptor('cover', { fileFilter: imageFileFilter }))
   public async updateCoverPicture(
     @UploadedFile() cover: Express.Multer.File,
+    @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<void> {}
+  ): Promise<void> {
+    this.service.updateCoverPicture(cover, user, id)
+  }
 }
 
 //res.sendFile(cover.filename, { root: 'temp' })
