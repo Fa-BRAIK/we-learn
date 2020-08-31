@@ -13,6 +13,10 @@ export class PlaylistsService {
     private readonly repository: PlaylistsRepository,
   ) {}
 
+  public async findUser(user: User): Promise<Playlist[]> {
+    return await this.repository.find({ where: { userId: user.id } })
+  }
+
   public async create(
     createPlaylistDto: CreatePlaylistDto,
     cover: Express.Multer.File,

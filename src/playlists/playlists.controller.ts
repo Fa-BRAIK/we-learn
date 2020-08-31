@@ -30,10 +30,9 @@ export class PlaylistsController {
   constructor(private readonly service: PlaylistsService) {}
 
   @Get()
-  /**
-   * returns a result for a search of playlists
-   */
-  public async findFilter(): Promise<void> {}
+  public async findUser(@GetUser() user: User): Promise<Playlist[]> {
+    return await this.service.findUser(user)
+  }
 
   @Post('create')
   @UseInterceptors(FileInterceptor('cover', { fileFilter: imageFileFilter }))
@@ -71,5 +70,3 @@ export class PlaylistsController {
     await this.service.delete(id, user)
   }
 }
-
-//res.sendFile(cover.filename, { root: 'temp' })
