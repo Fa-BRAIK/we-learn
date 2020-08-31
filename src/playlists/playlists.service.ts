@@ -43,6 +43,7 @@ export class PlaylistsService {
 
     try {
       fs.outputFile(`uploads/${path}`, img)
+      fs.remove(cover.path)
     } catch (e) {}
   }
 }

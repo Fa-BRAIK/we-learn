@@ -41,6 +41,4 @@ export class PlaylistsController {
   }
 }
 
-//const img = await fs.readFileSync(cover.path)
-
 //res.sendFile(cover.filename, { root: 'temp' })
