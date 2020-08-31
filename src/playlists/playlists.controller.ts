@@ -10,6 +10,9 @@ import {
   Req,
   InternalServerErrorException,
   Res,
+  Put,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { PlaylistsService } from './playlists.service'
@@ -39,6 +42,15 @@ export class PlaylistsController {
     @GetUser() user: User,
   ): Promise<Playlist> {
     return await this.service.create(createPlaylistDto, cover, user)
+  }
+
+  @Put('update/:id')
+  public async update(
+    @Body(ValidationPipe) CreatePlaylistDto: CreatePlaylistDto,
+    @GetUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Playlist> {
+    return null
   }
 }
 
