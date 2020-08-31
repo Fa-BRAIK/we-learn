@@ -16,5 +16,6 @@ import { TypeOrmModule } from '@nestjs/typeorm'
   ],
   controllers: [PlaylistsController],
   providers: [PlaylistsService],
+  exports: [PlaylistsService],
 })
 export class PlaylistsModule {}
