@@ -18,6 +18,7 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto'
 import { GetUser } from 'src/auth/get-user.decorator'
 import { User } from 'src/users/user.entity'
 import { Playlist } from './playlist.entity'
+import { imageFileFilter } from 'src/config/multer.config'
 
 @Controller('playlists')
 @UseGuards(AuthGuard())
@@ -31,7 +32,7 @@ export class PlaylistsController {
   public async findFilter(): Promise<void> {}
 
   @Post('create')
-  @UseInterceptors(FileInterceptor('cover'))
+  @UseInterceptors(FileInterceptor('cover', { fileFilter: imageFileFilter }))
   public async create(
     @UploadedFile() cover: Express.Multer.File,
     @Body(ValidationPipe) createPlaylistDto: CreatePlaylistDto,

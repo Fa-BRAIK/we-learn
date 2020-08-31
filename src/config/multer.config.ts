@@ -1,5 +1,11 @@
-import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface'
+import { BadRequestException } from '@nestjs/common'
 
-export const playlistImageOptions: MulterOptions = {
-  dest: './uploads/playlists',
+export const imageFileFilter = (req, file, callback) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+    return callback(
+      new BadRequestException(['File accepted are only: jpg, jpeg and png']),
+      false,
+    )
+  }
+  callback(null, true)
 }
