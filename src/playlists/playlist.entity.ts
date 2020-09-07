@@ -9,6 +9,7 @@ import {
 } from 'typeorm'
 import { User } from '../users/user.entity'
 import { Category } from '../categories/category.entity'
+import { Tag } from '../tags/tag.entity'
 
 @Entity()
 export class Playlist extends BaseEntity {
@@ -30,4 +31,8 @@ export class Playlist extends BaseEntity {
   @ManyToMany(type => Category)
   @JoinTable()
   categories: Category[]
+
+  @ManyToMany(type => Tag)
+  @JoinTable()
+  tags: Tag[]
 }
