@@ -46,17 +46,7 @@ export class PlaylistsService {
     createPlaylistDto: CreatePlaylistDto,
     id: number,
   ): Promise<void> {
-    const { title, description, link } = createPlaylistDto
-    const playlist = await this.repository.findOne(id)
-
-    if (playlist) {
-      playlist.title = title
-      playlist.description = description
-      playlist.link = link
-      await playlist.save()
-    } else {
-      throw new NotFoundException('Playlist with giving id not found')
-    }
+    await this.repository.updatePlaylist(createPlaylistDto, id)
   }
 
   public async updateCoverPicture(

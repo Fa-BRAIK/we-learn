@@ -1,10 +1,10 @@
 import { Playlist } from './playlist.entity'
-import { Repository, EntityRepository } from 'typeorm'
+import { Repository, EntityRepository, In } from 'typeorm'
 import { CreatePlaylistDto } from './dto/create-playlist.dto'
 import { User } from 'src/users/user.entity'
 import { Category } from 'src/categories/category.entity'
 import { Tag } from 'src/tags/tag.entity'
-import { InternalServerErrorException } from '@nestjs/common'
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { Objective } from 'src/objectives/objective.entity'
 
 @EntityRepository(Playlist)
@@ -22,10 +22,51 @@ export class PlaylistsRepository extends Repository<Playlist> {
       objectives,
     } = createPlaylistDto
 
-    const playlist_tags: Tag[] = [],
-      playlist_objectives: Objective[] = []
+    const playlist = new Playlist()
+    playlist.title = title
+    playlist.description = description
+    playlist.link = link
+    playlist.user = user
+    playlist.categories = await Category.findByIds(categories)
+    playlist.tags = await this.addPlaylistTags(tags)
+    playlist.objectives = await this.addPlaylistObjectives(objectives)
+    await playlist.save()
 
-    console.log(objectives)
+    return playlist
+  }
+
+  async updatePlaylist(
+    createPlaylistDto: CreatePlaylistDto,
+    id: number,
+  ): Promise<Playlist> {
+    const playlist = await this.findOne(id)
+
+    if (playlist) {
+      const {
+        title,
+        description,
+        link,
+        categories,
+        tags,
+        objectives,
+      } = createPlaylistDto
+
+      playlist.title = title
+      playlist.description = description
+      playlist.link = link
+      playlist.categories = await Category.findByIds(categories)
+      playlist.tags = await this.addPlaylistTags(tags)
+      playlist.objectives = await this.addPlaylistObjectives(objectives)
+      await playlist.save()
+
+      return playlist
+    } else {
+      throw new NotFoundException('Playlist with giving id not found')
+    }
+  }
+
+  private async addPlaylistTags(tags: string[]): Promise<Tag[]> {
+    const playlist_tags: Tag[] = []
 
     await tags.forEach(async name => {
       try {
@@ -41,6 +82,14 @@ export class PlaylistsRepository extends Repository<Playlist> {
       }
     })
 
+    return playlist_tags
+  }
+
+  private async addPlaylistObjectives(
+    objectives: { title: string; description: string }[],
+  ): Promise<Objective[]> {
+    const playlist_objectives: Objective[] = []
+
     await objectives.forEach(async data => {
       const objective = new Objective()
       objective.title = data.title
@@ -50,16 +99,6 @@ export class PlaylistsRepository extends Repository<Playlist> {
       playlist_objectives.push(objective)
     })
 
-    const playlist = new Playlist()
-    playlist.title = title
-    playlist.description = description
-    playlist.link = link
-    playlist.user = user
-    playlist.categories = await Category.findByIds(categories)
-    playlist.tags = playlist_tags
-    playlist.objectives = playlist_objectives
-    await playlist.save()
-
-    return playlist
+    return playlist_objectives
   }
 }
