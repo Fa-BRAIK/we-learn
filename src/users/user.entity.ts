@@ -7,8 +7,7 @@ import {
   OneToMany,
 } from 'typeorm'
 import * as bcrypt from 'bcrypt'
-import { type } from 'os'
-import { Playlist } from 'src/playlists/playlist.entity'
+import { Playlist } from '../playlists/playlist.entity'
 
 @Entity()
 @Unique(['username'])
