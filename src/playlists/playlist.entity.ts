@@ -4,8 +4,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm'
 import { User } from '../users/user.entity'
+import { Category } from '../categories/category.entity'
 
 @Entity()
 export class Playlist extends BaseEntity {
@@ -23,4 +26,8 @@ export class Playlist extends BaseEntity {
     { eager: false },
   )
   user: User
+
+  @ManyToMany(type => Category)
+  @JoinTable()
+  categories: Category[]
 }
