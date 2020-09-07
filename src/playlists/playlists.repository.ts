@@ -9,7 +9,7 @@ export class PlaylistsRepository extends Repository<Playlist> {
     createPlaylistDto: CreatePlaylistDto,
     user: User,
   ): Promise<Playlist> {
-    const { title, description, link } = createPlaylistDto
+    const { title, description, link, categories } = createPlaylistDto
 
     const playlist = new Playlist()
     playlist.title = title
