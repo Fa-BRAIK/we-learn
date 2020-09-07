@@ -2,6 +2,7 @@ import { Playlist } from './playlist.entity'
 import { Repository, EntityRepository } from 'typeorm'
 import { CreatePlaylistDto } from './dto/create-playlist.dto'
 import { User } from 'src/users/user.entity'
+import { Category } from 'src/categories/category.entity'
 
 @EntityRepository(Playlist)
 export class PlaylistsRepository extends Repository<Playlist> {
@@ -16,6 +17,7 @@ export class PlaylistsRepository extends Repository<Playlist> {
     playlist.description = description
     playlist.link = link
     playlist.user = user
+    playlist.categories = await Category.findByIds(categories)
     await playlist.save()
 
     return playlist
