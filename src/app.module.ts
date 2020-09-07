@@ -6,7 +6,8 @@ import { typeOrmConfig } from './config/typeorm.config'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
 import { PlaylistsModule } from './playlists/playlists.module'
-import { FilesModule } from './files/files.module';
+import { FilesModule } from './files/files.module'
+import { CategoriesModule } from './categories/categories.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { FilesModule } from './files/files.module';
     AuthModule,
     PlaylistsModule,
     FilesModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
