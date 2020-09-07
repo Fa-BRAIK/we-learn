@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module'
 import { PlaylistsModule } from './playlists/playlists.module'
 import { FilesModule } from './files/files.module'
 import { CategoriesModule } from './categories/categories.module'
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CategoriesModule } from './categories/categories.module'
     PlaylistsModule,
     FilesModule,
     CategoriesModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
