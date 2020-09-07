@@ -9,6 +9,7 @@ import { PlaylistsModule } from './playlists/playlists.module'
 import { FilesModule } from './files/files.module'
 import { CategoriesModule } from './categories/categories.module'
 import { TagsModule } from './tags/tags.module';
+import { ObjectivesModule } from './objectives/objectives.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TagsModule } from './tags/tags.module';
     FilesModule,
     CategoriesModule,
     TagsModule,
+    ObjectivesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

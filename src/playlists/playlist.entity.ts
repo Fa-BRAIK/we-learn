@@ -6,10 +6,12 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm'
 import { User } from '../users/user.entity'
 import { Category } from '../categories/category.entity'
 import { Tag } from '../tags/tag.entity'
+import { Objective } from '../objectives/objective.entity'
 
 @Entity()
 export class Playlist extends BaseEntity {
@@ -28,11 +30,18 @@ export class Playlist extends BaseEntity {
   )
   user: User
 
-  @ManyToMany(type => Category)
+  @ManyToMany(type => Category, { eager: true })
   @JoinTable()
   categories: Category[]
 
-  @ManyToMany(type => Tag)
+  @ManyToMany(type => Tag, { eager: true })
   @JoinTable()
   tags: Tag[]
+
+  @OneToMany(
+    type => Objective,
+    objective => objective.playlist,
+    { eager: true },
+  )
+  objectives: Objective[]
 }
