@@ -5,6 +5,7 @@ import { User } from 'src/users/user.entity'
 import { Category } from 'src/categories/category.entity'
 import { Tag } from 'src/tags/tag.entity'
 import { InternalServerErrorException } from '@nestjs/common'
+import { Objective } from 'src/objectives/objective.entity'
 
 @EntityRepository(Playlist)
 export class PlaylistsRepository extends Repository<Playlist> {
@@ -12,9 +13,19 @@ export class PlaylistsRepository extends Repository<Playlist> {
     createPlaylistDto: CreatePlaylistDto,
     user: User,
   ): Promise<Playlist> {
-    const { title, description, link, categories, tags } = createPlaylistDto
+    const {
+      title,
+      description,
+      link,
+      categories,
+      tags,
+      objectives,
+    } = createPlaylistDto
 
-    const playlist_tags: Tag[] = []
+    const playlist_tags: Tag[] = [],
+      playlist_objectives: Objective[] = []
+
+    console.log(objectives)
 
     await tags.forEach(async name => {
       try {
@@ -30,6 +41,15 @@ export class PlaylistsRepository extends Repository<Playlist> {
       }
     })
 
+    await objectives.forEach(async data => {
+      const objective = new Objective()
+      objective.title = data.title
+      objective.description = data.description
+      await objective.save()
+
+      playlist_objectives.push(objective)
+    })
+
     const playlist = new Playlist()
     playlist.title = title
     playlist.description = description
@@ -37,6 +57,7 @@ export class PlaylistsRepository extends Repository<Playlist> {
     playlist.user = user
     playlist.categories = await Category.findByIds(categories)
     playlist.tags = playlist_tags
+    playlist.objectives = playlist_objectives
     await playlist.save()
 
     return playlist

@@ -13,7 +13,6 @@ export class Objective extends BaseEntity {
 
   @Column() title: string
   @Column() description: string
-  @Column() playlistId: number
 
   @ManyToOne(
     type => Playlist,

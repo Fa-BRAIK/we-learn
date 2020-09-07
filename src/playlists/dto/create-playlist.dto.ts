@@ -4,11 +4,9 @@ import {
   MaxLength,
   IsUrl,
   IsArray,
-  ARRAY_MIN_SIZE,
   IsNotEmpty,
   ArrayUnique,
   ArrayMinSize,
-  isNotEmpty,
   ArrayMaxSize,
 } from 'class-validator'
 
@@ -39,4 +37,10 @@ export class CreatePlaylistDto {
   @ArrayMinSize(1)
   @ArrayMaxSize(5)
   tags: string[]
+
+  @IsArray()
+  @IsNotEmpty()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
+  objectives: { title: string; description: string }[]
 }
