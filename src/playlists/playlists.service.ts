@@ -5,6 +5,7 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto'
 import { Playlist } from './playlist.entity'
 import { User } from 'src/users/user.entity'
 import * as fs from 'fs-extra'
+import { Tag } from 'src/tags/tag.entity'
 const imagemin = require('imagemin')
 const imageminJpegtran = require('imagemin-jpegtran')
 const imageminPngquant = require('imagemin-pngquant')

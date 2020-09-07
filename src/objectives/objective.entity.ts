@@ -17,7 +17,7 @@ export class Objective extends BaseEntity {
   @ManyToOne(
     type => Playlist,
     playlist => playlist.objectives,
-    { eager: false },
+    { eager: false, onDelete: 'CASCADE' },
   )
   playlist: Playlist
 }

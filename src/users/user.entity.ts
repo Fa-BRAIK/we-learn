@@ -21,7 +21,7 @@ export class User extends BaseEntity {
   @OneToMany(
     type => Playlist,
     playlist => playlist.user,
-    { eager: true },
+    { eager: true, onDelete: 'CASCADE' },
   )
   playlists: Playlist[]
 

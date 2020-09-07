@@ -17,6 +17,6 @@ export class Category extends BaseEntity {
   @Column() name: string
   @Column() description: string
 
-  @ManyToMany(type => Playlist)
+  @ManyToMany(type => Playlist, { onDelete: 'CASCADE' })
   playlists: Playlist[]
 }
