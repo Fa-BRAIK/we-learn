@@ -16,6 +16,7 @@ export class Category extends BaseEntity {
 
   @Column() name: string
   @Column() description: string
+  @Column({ nullable: true }) playlistId: number
 
   @ManyToMany(type => Playlist)
   playlists: Playlist[]

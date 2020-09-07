@@ -4,8 +4,9 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto'
 import { User } from 'src/users/user.entity'
 import { Category } from 'src/categories/category.entity'
 import { Tag } from 'src/tags/tag.entity'
-import { InternalServerErrorException, NotFoundException } from '@nestjs/common'
+import { NotFoundException } from '@nestjs/common'
 import { Objective } from 'src/objectives/objective.entity'
+import { getConnection } from 'typeorm'
 
 @EntityRepository(Playlist)
 export class PlaylistsRepository extends Repository<Playlist> {
@@ -56,8 +57,10 @@ export class PlaylistsRepository extends Repository<Playlist> {
       playlist.link = link
       playlist.categories = await Category.findByIds(categories)
       playlist.tags = await this.addPlaylistTags(tags)
-      playlist.objectives = []
+      playlist.objectives = await this.addPlaylistObjectives(objectives)
       await playlist.save()
+
+      this.removeEmptyObjectives()
 
       return playlist
     } else {
@@ -90,15 +93,24 @@ export class PlaylistsRepository extends Repository<Playlist> {
   ): Promise<Objective[]> {
     const playlist_objectives: Objective[] = []
 
-    await objectives.forEach(async data => {
+    for (const record of objectives) {
       const objective = new Objective()
-      objective.title = data.title
-      objective.description = data.description
+      objective.title = record.title
+      objective.description = record.description
       await objective.save()
 
       playlist_objectives.push(objective)
-    })
+    }
 
     return playlist_objectives
+  }
+
+  private async removeEmptyObjectives(): Promise<void> {
+    getConnection()
+      .createQueryBuilder()
+      .delete()
+      .from(Objective)
+      .where('playlistId IS NULL')
+      .execute()
   }
 }
