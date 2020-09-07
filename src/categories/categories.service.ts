@@ -9,4 +9,8 @@ export class CategoriesService {
     @InjectRepository(Category)
     private readonly repository: Repository<Category>,
   ) {}
+
+  public async findAll(): Promise<Category[]> {
+    return await this.repository.find()
+  }
 }
