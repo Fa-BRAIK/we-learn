@@ -97,7 +97,7 @@ export class PlaylistsService {
     path: string,
   ): Promise<void> {
     try {
-      const compressed_images = await imagemin(['temp/*'], {
+      const compressed_images = await imagemin([`temp/${cover.filename}`], {
         destination: '',
         plugins: [
           imageminJpegtran(),
