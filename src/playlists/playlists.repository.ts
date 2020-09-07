@@ -56,7 +56,7 @@ export class PlaylistsRepository extends Repository<Playlist> {
       playlist.link = link
       playlist.categories = await Category.findByIds(categories)
       playlist.tags = await this.addPlaylistTags(tags)
-      playlist.objectives = await this.addPlaylistObjectives(objectives)
+      playlist.objectives = []
       await playlist.save()
 
       return playlist
@@ -67,20 +67,20 @@ export class PlaylistsRepository extends Repository<Playlist> {
 
   private async addPlaylistTags(tags: string[]): Promise<Tag[]> {
     const playlist_tags: Tag[] = []
+    const existing_tags = await Tag.find({ name: In(tags) })
 
-    await tags.forEach(async name => {
-      try {
-        const tag = new Tag()
-        tag.name = name
-        await tag.save()
+    playlist_tags.push(...existing_tags)
 
-        playlist_tags.push(tag)
-      } catch (e) {
-        if (e.code === 'ER_DUP_ENTRY') {
-          playlist_tags.push(await Tag.findOne({ name }))
-        } else throw new InternalServerErrorException()
-      }
-    })
+    const remaining_tags = tags.filter(
+      tag => playlist_tags.findIndex(record => record.name === tag) === -1,
+    )
+
+    for (const name of remaining_tags) {
+      const tag = new Tag()
+      tag.name = name
+      await tag.save()
+      playlist_tags.push(tag)
+    }
 
     return playlist_tags
   }

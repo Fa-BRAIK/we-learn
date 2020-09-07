@@ -30,18 +30,18 @@ export class Playlist extends BaseEntity {
   )
   user: User
 
-  @ManyToMany(type => Category, { eager: true, onDelete: 'CASCADE' })
+  @ManyToMany(type => Category, { eager: true, cascade: true })
   @JoinTable()
   categories: Category[]
 
-  @ManyToMany(type => Tag, { eager: true, onDelete: 'CASCADE' })
+  @ManyToMany(type => Tag, { eager: true, cascade: true })
   @JoinTable()
   tags: Tag[]
 
   @OneToMany(
     type => Objective,
     objective => objective.playlist,
-    { eager: true, onDelete: 'CASCADE' },
+    { eager: true, cascade: true },
   )
   objectives: Objective[]
 }
