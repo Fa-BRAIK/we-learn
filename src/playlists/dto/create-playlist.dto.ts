@@ -8,6 +8,8 @@ import {
   IsNotEmpty,
   ArrayUnique,
   ArrayMinSize,
+  isNotEmpty,
+  ArrayMaxSize,
 } from 'class-validator'
 
 export class CreatePlaylistDto {
@@ -30,4 +32,11 @@ export class CreatePlaylistDto {
   @ArrayUnique()
   @ArrayMinSize(1)
   categories: number[]
+
+  @IsArray()
+  @IsNotEmpty()
+  @ArrayUnique()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
+  tags: string[]
 }
