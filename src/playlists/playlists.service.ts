@@ -5,6 +5,9 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto'
 import { Playlist } from './playlist.entity'
 import { User } from 'src/users/user.entity'
 import * as fs from 'fs-extra'
+const imagemin = require('imagemin')
+const imageminJpegtran = require('imagemin-jpegtran')
+const imageminPngquant = require('imagemin-pngquant')
 
 @Injectable()
 export class PlaylistsService {
@@ -93,11 +96,29 @@ export class PlaylistsService {
     cover: Express.Multer.File,
     path: string,
   ): Promise<void> {
-    const img = await fs.readFileSync(cover.path)
-
     try {
-      fs.outputFile(`uploads/${path}`, img)
-      fs.remove(cover.path)
-    } catch (e) {}
+      const compressed_images = await imagemin(['temp/*'], {
+        destination: '',
+        plugins: [
+          imageminJpegtran(),
+          imageminPngquant({
+            quality: [0.6, 0.8],
+          }),
+        ],
+      })
+
+      if (compressed_images.length > 0) {
+        fs.outputFile(`uploads/${path}`, compressed_images[0].data)
+        fs.remove(cover.path)
+      } else {
+        console.warn('Warrning: Storing image without compression')
+        const img = await fs.readFileSync(cover.path)
+
+        fs.outputFile(`uploads/${path}`, img)
+        fs.remove(cover.path)
+      }
+    } catch (e) {
+      console.error('Error storing and compressing playlist image', e)
+    }
   }
 }
